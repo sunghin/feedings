@@ -23,8 +23,14 @@ def run(pw):
     page.locator("div label[title='Jurong Bird Park'] h3").click()
     page.locator("a.btn-proceed").click()
 
-    # todo: click this month AND next month
-    page.locator("a.ui-datepicker-next").click()
+    #click this month AND next month
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("This month"):
+            pass
+    with col2:
+        if st.button("Next month"):
+            page.locator("a.ui-datepicker-next").click()
 
     date_month = page.locator("span.ui-datepicker-month").inner_text()
     # date_year = page.locator("span.ui-datepicker-year").inner_text()
@@ -64,7 +70,7 @@ def run(pw):
 with sync_playwright() as playwright:
     run(playwright)
 
-progress_bar.success("Success!")
+progress_bar.empty()
 progress_status.empty()
 
 tabs = st.tabs(availability_dict.keys())
@@ -77,3 +83,4 @@ for day, schedules in availability_dict.items():
                                                                                                 axis=None,
                                                                                                 color="#ADDDD0"))
     tab_count += 1
+
