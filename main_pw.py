@@ -24,7 +24,7 @@ def run(pw):
     page.locator("a.btn-proceed").click()
 
     #click this month AND next month
-    col1, col2 = st.columns([0.2, 1])
+    col1, col2, col3 = st.columns([1, 1, 4])
     with col1:
         if st.button("This month"):
             pass
