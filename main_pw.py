@@ -44,6 +44,7 @@ def run(pw):
         wkend_locator.nth(progress_counter).click()
         page.locator("a.btn-proceed").click()
 
+        page.wait_for_load_state("domcontentloaded")
         html = page.inner_html("div.list-addon-selection")
         soup = BeautifulSoup(html, "html.parser")
         activities_list = soup.select("div.wrap-addon-selection")
