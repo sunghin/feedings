@@ -2,16 +2,21 @@ from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 import pandas as pd
 import streamlit as st
+import os
+
+os.system("playwright install")
 
 MANDAI_ENDPOINT = "https://www.mandai.com/en/ticketing/add-ons/parks-selection.html"
 availability_dict = {}
 progress_bar = st.empty()
 progress_status = st.empty()
 progress_bar.progress(0)
+progress_status.caption("Starting up...")
 
 
-with sync_playwright() as p:
-    browser = p.chromium.launch()
+def run(pw):
+
+    browser = pw.chromium.launch()
     page = browser.new_page()
     page.goto(MANDAI_ENDPOINT)
     page.locator("div label[title='Singapore Zoo'] h3").click()
@@ -53,9 +58,13 @@ with sync_playwright() as p:
         availability_dict[date_today] = select_date_dict
         page.go_back()
         progress_counter += 1
+
+
+with sync_playwright() as playwright:
+    run(playwright)
+
 progress_bar.success("Success!")
 progress_status.empty()
-
 
 tabs = st.tabs(availability_dict.keys())
 tab_count = 0
@@ -67,17 +76,3 @@ for day, schedules in availability_dict.items():
                                                                                                 axis=None,
                                                                                                 color="#ADDDD0"))
     tab_count += 1
-
-
-# dataframe(pd.DataFrame(times, index=[activities]).style.highlight_between(left=1,
-#                                                                              right=100,
-#                                                                              axis=None,
-#                                                                              color="#ADDDD0"))
-
-
-# cols = st.columns(len(availability_dict), gap="large")
-# col_count = 0
-# for title, schedule in availability_dict.items():
-#     cols[col_count].write(title)
-#     cols[col_count].write(schedule)
-#     col_count += 1
